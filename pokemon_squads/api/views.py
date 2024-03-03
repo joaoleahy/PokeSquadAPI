@@ -12,6 +12,15 @@ class TeamListView(views.APIView):
         serializer = TeamSerializer(teams, many=True)
         return Response(serializer.data)
 
+class TeamRetrieveView(views.APIView):
+    def get(self, request, user):
+        try:
+            team = Team.objects.get(user=user)
+            serializer = TeamSerializer(team)
+            return Response(serializer.data)
+        except Team.DoesNotExist:
+            return Response({'message': 'Time não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
 class TeamCreateView(views.APIView):
     def post(self, request):
         serializer = TeamSerializer(data=request.data)
