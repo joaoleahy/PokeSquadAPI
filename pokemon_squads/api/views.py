@@ -17,14 +17,14 @@ class TeamCreateView(views.APIView):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            pokemons = serializer.validated_data.get('pokemons', [])
+            pokemon_names = serializer.validated_data.get('team', [])
             
             pokemon_api = PokeAPI()
             repository = DjangoORMTeamRepository()
             use_case = CreateTeamUseCase(repository, pokemon_api)
             
             try:
-                team = use_case.execute(user, [pokemon['name'] for pokemon in pokemons])
+                team = use_case.execute(user, pokemon_names)
                 return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
             except ValueError as e:
                 return Response(str(e), status=status.HTTP_400_BAD_REQUEST)

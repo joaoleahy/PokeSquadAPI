@@ -15,10 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include  # Importe include
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('pokemon_squads.api.urls')),  # Substitua 'pokemon_squads.api.urls' pelo caminho correto para o seu arquivo urls.py na aplicação
+    path('api/', include('pokemon_squads.api.urls')),
 ]
 
