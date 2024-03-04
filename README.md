@@ -1,4 +1,4 @@
-# Pokémon Teams API
+# Pokémon Squads API
 
 ## Overview
 The Pokémon Teams API enables users to create, manage, and retrieve Pokémon teams. Each team is associated with a user and can consist of multiple Pokémon, each with their specific stats including name, weight, and height. This API is perfect for Pokémon enthusiasts who wish to organize their ideal Pokémon teams and share them with others.
