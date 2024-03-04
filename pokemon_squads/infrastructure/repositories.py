@@ -12,3 +12,6 @@ class DjangoORMTeamRepository(TeamRepository):
             Pokemon.objects.create(team=team, **pokemon_data)
 
         return team
+    
+    def exists(self, user):
+        return Team.objects.filter(user=user).exists()
