@@ -9,12 +9,17 @@ from .serializers import TeamSerializer
 class TeamListView(views.APIView):
     def get(self, request):
         teams = Team.objects.all()
-        serialized_teams = {}
+        formatted_teams = {}
         for team in teams:
-            serializer = TeamSerializer(team, context={'use_custom_format': True})
-            serialized_team = serializer.data
-            serialized_teams.update(serialized_team)
-        return Response(serialized_teams)
+            serializer = TeamSerializer(team)
+            serialized_data = serializer.data
+            formatted_data = {
+                'owner': serialized_data['owner'],
+                'pokemons': serialized_data['pokemons']
+            }
+            formatted_teams[str(team.id)] = formatted_data
+        return Response(formatted_teams)
+
 
 
 class TeamRetrieveView(views.APIView):
@@ -22,9 +27,16 @@ class TeamRetrieveView(views.APIView):
         try:
             team = Team.objects.get(user=user)
             serializer = TeamSerializer(team)
-            return Response(serializer.data)
+            serialized_data = serializer.data
+            
+            formatted_data = {
+                'owner': serialized_data.get('owner'),
+                'pokemons': serialized_data.get('pokemons', [])
+            }
+
+            return Response(formatted_data)
         except Team.DoesNotExist:
-            return Response({'message': 'Time não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Team not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TeamCreateView(views.APIView):
@@ -40,7 +52,7 @@ class TeamCreateView(views.APIView):
             
             try:
                 team = use_case.execute(user, pokemon_names)
-                return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
+                return Response({'message': f'Team created successfully for user {user}', 'team_id': team.id}, status=status.HTTP_201_CREATED)
             except ValueError as e:
                 return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
