@@ -1,5 +1,7 @@
 from rest_framework import status, views
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from pokemon_squads.domain.use_cases import CreateTeamUseCase
 from pokemon_squads.infrastructure.pokemon_api import PokeAPI
 from pokemon_squads.infrastructure.repositories import DjangoORMTeamRepository
@@ -7,6 +9,12 @@ from pokemon_squads.models import Team
 from .serializers import TeamSerializer
 
 class TeamListView(views.APIView):
+    @swagger_auto_schema(
+        operation_summary="List all Teams",
+        operation_description="Retrieve a list of all Pokemon teams available in the database.",
+        responses={200: openapi.Response('A list of Pokemon Teams', TeamSerializer(many=True))},
+        tags=['Teams'],
+    )
     def get(self, request):
         teams = Team.objects.all()
         formatted_teams = {}
@@ -23,6 +31,16 @@ class TeamListView(views.APIView):
 
 
 class TeamRetrieveView(views.APIView):
+    @swagger_auto_schema(
+        operation_summary="Retrieve Team by User",
+        operation_description="Retrieve a specific team by the team's owner username.",
+        responses={
+            200: openapi.Response('Team details', TeamSerializer()),
+            404: 'Team not found'
+        },
+        tags=['Teams'],
+    )
+
     def get(self, request, user):
         try:
             team = Team.objects.get(user=user)
@@ -40,6 +58,21 @@ class TeamRetrieveView(views.APIView):
 
 
 class TeamCreateView(views.APIView):
+    @swagger_auto_schema(
+        operation_summary="Create a New Team",
+        operation_description="Create a new Pokemon team with the provided username and list of Pokemons.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['user', 'team'],
+            properties={
+                'user': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'team': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_STRING), description='List of Pokemon names')
+            },
+        ),
+        responses={201: openapi.Response('Team created successfully', TeamSerializer())},
+        tags=['Teams'],
+    )
+
     def post(self, request):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
