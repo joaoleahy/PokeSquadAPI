@@ -7,7 +7,7 @@ from pokemon_squads.models import Team
 from .serializers import TeamSerializer
 
 class TeamListView(views.APIView):
-    def get(self):
+    def get(self, request):
         teams = Team.objects.all()
         serialized_teams = {}
         for team in teams:
@@ -18,7 +18,7 @@ class TeamListView(views.APIView):
 
 
 class TeamRetrieveView(views.APIView):
-    def get(self, user):
+    def get(self, request, user):
         try:
             team = Team.objects.get(user=user)
             serializer = TeamSerializer(team)
