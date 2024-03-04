@@ -1,32 +1,32 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 from pokemon_squads.models import Team, Pokemon
-from pokemon_squads.infrastructure.pokemon_api import PokeAPI
 
 class PokemonSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='poke_id', read_only=True)
+
     class Meta:
         model = Pokemon
-        fields = ['poke_id', 'name', 'height', 'weight']
+        fields = ['id', 'name', 'weight', 'height']
 
 class TeamSerializer(serializers.ModelSerializer):
-    team = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
+    owner = serializers.CharField(source='user', read_only=True)
     pokemons = PokemonSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team
-        fields = ['id', 'user', 'team', 'pokemons']
+        fields = ['owner', 'pokemons']
 
-    def create(self, validated_data):
-        pokemon_names = validated_data.pop('team')
-        user = validated_data.get('user')
-        team = Team.objects.create(user=user)
-        poke_api = PokeAPI()
+    def to_representation(self, instance):
+        """Custom representation of team data."""
+        representation = super().to_representation(instance)
+        # Verifica se deve usar a representação com o ID do time como chave
+        if self.context.get('use_custom_format', False):
+            return {
+                str(instance.id): {
+                    'owner': representation['owner'],
+                    'pokemons': representation['pokemons']
+                }
+            }
+        else:
+            return representation
 
-        for name in pokemon_names:
-            pokemon_data = poke_api.get_pokemon_data(name)
-            if pokemon_data:
-                Pokemon.objects.create(team=team, **pokemon_data)
-            else:
-                raise ValidationError({'team': [f"Pokémon '{name}' not found."]})
-
-        return team

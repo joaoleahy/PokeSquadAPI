@@ -9,17 +9,26 @@ from .serializers import TeamSerializer
 class TeamListView(views.APIView):
     def get(self, request):
         teams = Team.objects.all()
-        serializer = TeamSerializer(teams, many=True)
-        return Response(serializer.data)
+        serialized_teams = {}  # Dicionário para acumular os times serializados
+        for team in teams:
+            serializer = TeamSerializer(team, context={'use_custom_format': True})
+            serialized_team = serializer.data
+            # Assumindo que a chave do dicionário serializado é o ID do time
+            team_id = list(serialized_team.keys())[0]
+            serialized_teams.update(serialized_team)
+        return Response(serialized_teams)
+
 
 class TeamRetrieveView(views.APIView):
     def get(self, request, user):
         try:
             team = Team.objects.get(user=user)
+            # Não passa o contexto adicional, usando a representação padrão
             serializer = TeamSerializer(team)
             return Response(serializer.data)
         except Team.DoesNotExist:
             return Response({'message': 'Time não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class TeamCreateView(views.APIView):
     def post(self, request):
