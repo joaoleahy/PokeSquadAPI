@@ -17,9 +17,7 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = ['owner', 'pokemons']
 
     def to_representation(self, instance):
-        """Custom representation of team data."""
         representation = super().to_representation(instance)
-        # Verifica se deve usar a representação com o ID do time como chave
         if self.context.get('use_custom_format', False):
             return {
                 str(instance.id): {

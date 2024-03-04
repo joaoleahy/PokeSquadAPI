@@ -7,23 +7,20 @@ from pokemon_squads.models import Team
 from .serializers import TeamSerializer
 
 class TeamListView(views.APIView):
-    def get(self, request):
+    def get(self):
         teams = Team.objects.all()
-        serialized_teams = {}  # Dicionário para acumular os times serializados
+        serialized_teams = {}
         for team in teams:
             serializer = TeamSerializer(team, context={'use_custom_format': True})
             serialized_team = serializer.data
-            # Assumindo que a chave do dicionário serializado é o ID do time
-            team_id = list(serialized_team.keys())[0]
             serialized_teams.update(serialized_team)
         return Response(serialized_teams)
 
 
 class TeamRetrieveView(views.APIView):
-    def get(self, request, user):
+    def get(self, user):
         try:
             team = Team.objects.get(user=user)
-            # Não passa o contexto adicional, usando a representação padrão
             serializer = TeamSerializer(team)
             return Response(serializer.data)
         except Team.DoesNotExist:
