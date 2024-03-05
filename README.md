@@ -22,7 +22,7 @@ The Pokémon Teams API enables users to create, manage, and retrieve Pokémon te
 ### Setup Instructions
 1. Clone the repository to your local machine:
 ```
-git clone https://github.com/YourUsername/pokemon-teams-api.git
+git clone git@github.com:joaoleahy/PokeSquadAPI.git
 ```
 
 2. Use docker-compose to build and start the service:
