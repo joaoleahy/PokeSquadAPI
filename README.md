@@ -34,11 +34,11 @@ The API will now be running locally on the port specified in the `docker-compose
 ## API Endpoints
 
 ### Create a Team
-- **Endpoint**: `POST /api/teams/`
+- **Endpoint**: `POST /api/teams/create/`
 - **Body**:
 ```json
 {
-  "user": "username",
+  "user": "Ash",
   "team": ["pikachu", "charizard", "bulbasaur"]
 }
 ```
