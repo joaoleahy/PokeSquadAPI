@@ -31,6 +31,16 @@ docker-compose up --build
 ```
 The API will now be running locally on the port specified in the `docker-compose.yml` file, typically accessible via `http://localhost:8000`.
 
+3. Realize the migration:
+```
+python manage.py migrate
+```
+
+4. Run tests:
+```
+python manage.py test
+```
+
 ## API Endpoints
 
 ### Create a Team
