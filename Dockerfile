@@ -9,7 +9,6 @@ COPY . .
 
 ENV DJANGO_SETTINGS_MODULE=pokemon_project.settings
 
-RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
 
 
