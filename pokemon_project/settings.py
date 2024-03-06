@@ -77,15 +77,12 @@ WSGI_APPLICATION = 'pokemon_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DJANGO_DB_NAME', 'pokemondb'),
-        'USER': os.environ.get('DJANGO_DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'admin'),
-        'HOST': os.environ.get('DJANGO_DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DJANGO_DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DJANGO_DB_NAME', 'pokemondb'),
+        'USER': os.getenv('DJANGO_DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'admin'),
     }
 }
 
@@ -125,6 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
