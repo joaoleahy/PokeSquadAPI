@@ -31,16 +31,6 @@ docker-compose up --build
 ```
 The API will now be running locally on the port specified in the `docker-compose.yml` file, typically accessible via `http://localhost:8000`.
 
-3. Realize the migration:
-```
-python manage.py migrate
-```
-
-4. Run tests:
-```
-python manage.py test
-```
-
 ## API Endpoints
 
 ### Create a Team
@@ -48,7 +38,7 @@ python manage.py test
 - **Body**:
 ```json
 {
-  "user": "Ash",
+  "user": "Jon",
   "team": ["pikachu", "charizard", "bulbasaur"]
 }
 ```
@@ -56,10 +46,91 @@ python manage.py test
 
 ### List All Teams
 - **Endpoint**: `GET /api/teams/`
+```json
+{
+  "1": {
+    "owner": "Ash",
+    "pokemons": [
+      {
+        "id": 9,
+        "name": "blastoise",
+        "weight": 855,
+        "height": 16
+      },
+      {
+        "id": 25,
+        "name": "pikachu",
+        "weight": 60,
+        "height": 4
+      }
+    ]
+  },
+  "2": {
+    "owner": "Dany",
+    "pokemons": [
+      {
+        "id": 9,
+        "name": "blastoise",
+        "weight": 855,
+        "height": 16
+      },
+      {
+        "id": 25,
+        "name": "pikachu",
+        "weight": 60,
+        "height": 4
+      },
+      {
+        "id": 3,
+        "name": "venusaur",
+        "weight": 1000,
+        "height": 20
+      },
+      {
+        "id": 6,
+        "name": "charizard",
+        "weight": 905,
+        "height": 17
+      },
+      {
+        "id": 131,
+        "name": "lapras",
+        "weight": 2200,
+        "height": 25
+      },
+      {
+        "id": 54,
+        "name": "psyduck",
+        "weight": 196,
+        "height": 8
+      }
+    ]
+  }
+}
+```
 - **Description**: Fetches a list of all Pokémon teams, including detailed information about the Pokémon in each team.
 
 ### Retrieve a Team by User
 - **Endpoint**: `GET /api/teams/{user}`
+```json
+{
+  "owner": "Ash",
+  "pokemons": [
+    {
+      "id": 9,
+      "name": "blastoise",
+      "weight": 855,
+      "height": 16
+    },
+    {
+      "id": 25,
+      "name": "pikachu",
+      "weight": 60,
+      "height": 4
+    }
+  ]
+}
+```
 - **Description**: Retrieves a specific Pokémon team by user name.
 
 
