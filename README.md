@@ -12,6 +12,7 @@ The Pokémon Teams API enables users to create, manage, and retrieve Pokémon te
 - **Django Rest Framework**: For building the RESTful API.
 - **PostgreSQL**: As the relational database to store team and Pokémon data.
 - **Docker**: For containerization, ensuring the application is easy to setup and run across different environments.
+- **Swagger (drf-yasg)**: To provide a user-friendly interface for documenting and testing the API endpoints. Swagger makes it easy for developers and users to understand the API's capabilities without digging into the source code.
 
 ## Getting Started
 
